@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/church.svg') }}">
-    <title>Hello!</title>
-    @vite('resources/css/app.css')
-</head>
+<x-head />
 
 <body>
     <div class="flex flex-col justify-center pt-20 gap-10 w-full">
@@ -24,6 +17,5 @@
         </div>
     </div>
 </body>
-
 
 </html>
