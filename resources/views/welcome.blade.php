@@ -4,7 +4,7 @@
 <x-head />
 
 <body>
-    <div class="flex flex-col justify-center pt-20 gap-10 w-full">
+    <div class="flex flex-col justify-center items-center h-screen gap-10 w-full">
         <div class="text-3xl font-bold flex justify-center">
             Are you arriving or leaving?
         </div>

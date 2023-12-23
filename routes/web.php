@@ -24,3 +24,7 @@ Route::get('/search-page', function () {
 Route::get('/multiple-members', function () {
     return view('multiple-members');
 });
+
+Route::get("/checked-in", function () {
+    return view('checked-in');
+});
