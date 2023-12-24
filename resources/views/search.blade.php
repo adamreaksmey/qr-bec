@@ -10,7 +10,7 @@
         </div>
         <div class="flex justify-center gap-3">
             <div class="w-3/5"> <input class="input is-primary" type="text" placeholder="Search"></div>
-            <button class="button is-success">Submit</button>
+            <button class="button is-success" onclick="window.location.href = '/checked-in'">Submit</button>
         </div>
         <div class="flex justify-center items-end">
             <button class="button is-warning">ខ្មែរ | English</button>
