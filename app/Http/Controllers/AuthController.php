@@ -6,21 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Exception;
+use App\Http\Requests\UserRegistrationRequest;
 
 class AuthController extends Controller
 {
+    public function __construct(private UserRegistrationRequest $userRequest)
+    {
+    }
     public function login()
     {
     }
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-
+        $validated = $this->userRequest->validated();
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
