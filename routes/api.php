@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +19,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:api'])->group(function () {
-    Route::get('/authorized-user', function () {
-        return auth()->user();
+Route::prefix('bec')->namespace('bec')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/hello-test', function () {
+        return [
+            "name" => "adam"
+        ];
+    });
+
+    Route::middleware(['auth:api'])->group(function () {
+        Route::controller(AuthController::class)->group(function () {
+            Route::post('/post', 'login');
+            Route::post('/logout', 'logout');
+            Route::get('/requested-users', 'requested');
+        });
     });
 });
