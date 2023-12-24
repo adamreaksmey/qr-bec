@@ -25,11 +25,7 @@ Route::prefix('bec')->namespace('bec')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::middleware(['auth:api'])->group(function () {
-        Route::get('/hello-test', function () {
-            return [
-                "name" => "adam"
-            ];
-        });
+        Route::post('/create-relative', [AuthController::class, 'registerRelatives']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/requested-users', [AuthController::class, 'requested']);
     });
