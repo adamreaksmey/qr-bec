@@ -28,10 +28,8 @@ Route::prefix('bec')->namespace('bec')->group(function () {
     });
 
     Route::middleware(['auth:api'])->group(function () {
-        Route::controller(AuthController::class)->group(function () {
-            Route::post('/post', 'login');
-            Route::post('/logout', 'logout');
-            Route::get('/requested-users', 'requested');
-        });
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/requested-users', [AuthController::class, 'requested']);
     });
 });
