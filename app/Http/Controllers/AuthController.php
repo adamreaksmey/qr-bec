@@ -12,15 +12,14 @@ use App\Http\Requests\UserLoginForm;
 
 class AuthController extends Controller
 {
-    public function __construct(private UserRegistrationRequest $userRequest, private UserLoginForm $userLoginForm)
+
+    public function login(UserLoginForm $request)
     {
-    }
-    public function login(Request $request)
-    {
-        $validated = $this->userLoginForm->validated();
+        $validated = $request->validated();
         $credentials = $request->only('email', 'password');
 
         $token = Auth::attempt($credentials);
+
         if (!$token) {
             return response()->json([
                 'status' => 'error',
@@ -39,9 +38,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
+    public function register(UserRegistrationRequest $request)
     {
-        $validated = $this->userRequest->validated();
+        $validated = $request->validated();
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

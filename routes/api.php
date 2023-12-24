@@ -20,7 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('bec')->namespace('bec')->group(function () {
+
     Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+
     Route::get('/hello-test', function () {
         return [
             "name" => "adam"
@@ -28,7 +31,6 @@ Route::prefix('bec')->namespace('bec')->group(function () {
     });
 
     Route::middleware(['auth:api'])->group(function () {
-        Route::post('/login', [AuthController::class, 'login']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/requested-users', [AuthController::class, 'requested']);
     });
