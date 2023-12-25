@@ -9,52 +9,51 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Exception;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Http\Requests\UserLoginForm;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
 
     public function login(UserLoginForm $request)
     {
-        $validated = $request->validated();
-        $credentials = $request->only('email', 'password');
 
-        $token = Auth::attempt($credentials);
-
-        if (!$token) {
+        // try {
+            $validated = $request->validated();
+            $credentials = $request->only('email', 'password');
+    
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+    
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
-        }
-
-        $user = Auth::user();
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+                'status' => 'success',
+                'token' => $token
+            ]);
+        // } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+        //     try {
+        //         $token = JWTAuth::refresh(JWTAuth::getToken());
+        //         return response()->json(['newToken' => $token], 200);
+        //     } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+        //         return response()->json(['error' => $e], 401);
+        //     }
+        // }
     }
 
     public function register(UserRegistrationRequest $request)
     {
         $validated = $request->validated();
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
 
-        $token = Auth::login($user);
+        $password = Hash::make($request->phone_number);
+        $user = User::create(array_merge($request->except('password'), [
+            "password" => $password
+        ]));
 
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
             'user' => $user,
             'authorization' => [
-                'token' => $token,
+                // 'token' => $token,
                 'type' => 'bearer',
             ],
         ]);
@@ -63,7 +62,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        JWTAuth::logout();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',
@@ -74,16 +73,11 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'user' => Auth::user(),
+            'user' => JWTAuth::user(),
             'authorisation' => [
-                'token' => Auth::refresh(),
+                'token' => JWTAuth::refresh(),
                 'type' => 'bearer',
             ]
         ]);
-    }
-    
-    public function registerRelatives()
-    {
-        
     }
 }

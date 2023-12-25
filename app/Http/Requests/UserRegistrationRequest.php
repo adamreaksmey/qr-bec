@@ -28,7 +28,7 @@ class UserRegistrationRequest extends BaseRequest
             'name' => 'required|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'phone' => 'required|string'
+            'phone_number' => 'required|string'
         ];
     }
 }
