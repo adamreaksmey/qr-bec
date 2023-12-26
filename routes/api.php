@@ -22,5 +22,6 @@ Route::prefix('bec')->namespace('bec')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create-relative', [MembersController::class, 'registerRelatives']);
         Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/all-members', [MembersController::class, 'getAllMembers']);
     });
 });

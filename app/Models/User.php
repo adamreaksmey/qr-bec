@@ -24,7 +24,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     public function relatives(){
-        return $this->hasMany(Relatives::class);
+        return $this->hasMany(Relatives::class, 'parentId');
     }
 
     /**

@@ -26,7 +26,7 @@ class RelativeRegistrationForm extends BaseRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'parentId' => 'required|number'
+            'parentId' => 'required|integer'
         ];
     }
 }
