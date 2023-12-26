@@ -5,89 +5,60 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Exception;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Http\Requests\UserLoginForm;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AuthController extends Controller
 {
 
     public function login(UserLoginForm $request)
     {
-
-        // try {
-            $validated = $request->validated();
-            $credentials = $request->only('email', 'password');
-    
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-    
-            return response()->json([
-                'status' => 'success',
-                'token' => $token
+        $request->validated();
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response([
+                'message' => 'User Not Found!',
+                'success' => false
             ]);
-        // } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-        //     try {
-        //         $token = JWTAuth::refresh(JWTAuth::getToken());
-        //         return response()->json(['newToken' => $token], 200);
-        //     } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-        //         return response()->json(['error' => $e], 401);
-        //     }
-        // }
+        }
+        if (Hash::check($request->password, $user->password)) {
+            $token = $user->createToken('authToken')->plainTextToken;
+
+            return response([
+                'message' => 'Longin Success',
+                'success' => true,
+                'user' => $user,
+                'token' => $token,
+            ]);
+        }
+        return response([
+            'message' => 'Email and Password  not found!',
+            'success' => false,
+        ]);
     }
 
     public function register(UserRegistrationRequest $request)
     {
         $validated = $request->validated();
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['phone_number'] = str_replace(' ', '', $validated['phone_number']);
 
-        $password = Hash::make($request->phone_number);
-        $user = User::create([
-            "name" => $request->name,
-            "phone_number" => $request->phone_number,
-            "password" => $password
-        ]);
+        $user = User::create($validated);
 
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
             'user' => $user,
             'authorization' => [
-                // 'token' => $token,
                 'type' => 'bearer',
             ],
         ]);
     }
 
 
-    public function logout()
+    public function logout(Request $request)
     {
-        JWTAuth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
-    }
-
-    public function refresh()
-    {
-        $token = JWTAuth::getToken();
-
-        if (! $token) {
-            throw new BadRequestHttpException('Token not provided');
-        }
-
-        try {
-            $token = JWTAuth::refresh($token);
-        } catch (TokenInvalidException $e) {
-            throw new AccessDeniedHttpException('The token is invalid');
-        }
-
-        return response()->json(compact('token'));
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }

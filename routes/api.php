@@ -16,25 +16,11 @@ use App\Http\Controllers\MembersController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::prefix('bec')->namespace('bec')->group(function () {
-
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
-
-    Route::middleware(['auth:api'])->group(function () {
-        Route::get('/hello', function () {
-            return [
-                "message" => "hello world"
-            ];
-        });
-        
+    Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create-relative', [MembersController::class, 'registerRelatives']);
         Route::post('/logout', [AuthController::class, 'logout']);
-        // Route::get('/requested-users', [AuthController::class, 'requested']);
     });
 });
