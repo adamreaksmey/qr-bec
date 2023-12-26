@@ -35,6 +35,6 @@ Route::prefix('bec')->namespace('bec')->group(function () {
         
         Route::post('/create-relative', [MembersController::class, 'registerRelatives']);
         Route::post('/logout', [AuthController::class, 'logout']);
-        Route::get('/requested-users', [AuthController::class, 'requested']);
+        // Route::get('/requested-users', [AuthController::class, 'requested']);
     });
 });

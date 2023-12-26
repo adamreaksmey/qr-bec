@@ -10,6 +10,9 @@ use App\Http\Controllers\Exception;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Http\Requests\UserLoginForm;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AuthController extends Controller
 {
@@ -71,13 +74,18 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => JWTAuth::user(),
-            'authorisation' => [
-                'token' => JWTAuth::refresh(),
-                'type' => 'bearer',
-            ]
-        ]);
+        $token = JWTAuth::getToken();
+
+        if (! $token) {
+            throw new BadRequestHttpException('Token not provided');
+        }
+
+        try {
+            $token = JWTAuth::refresh($token);
+        } catch (TokenInvalidException $e) {
+            throw new AccessDeniedHttpException('The token is invalid');
+        }
+
+        return response()->json(compact('token'));
     }
 }
