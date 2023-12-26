@@ -23,6 +23,7 @@ class AuthController extends Controller
         }
         if (Hash::check($request->password, $user->password)) {
             $token = $user->createToken('authToken')->plainTextToken;
+            return redirect('/dashboard');
 
             return response([
                 'message' => 'Longin Success',

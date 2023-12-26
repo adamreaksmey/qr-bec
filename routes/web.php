@@ -28,3 +28,13 @@ Route::get('/multiple-members', function () {
 Route::get("/checked-in", function () {
     return view('checked-in');
 });
+
+Route::get("/login", function () {
+    return view('admin.login');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get("/dashboard", function () {
+        return view('admin.dashboard');
+    });
+});
