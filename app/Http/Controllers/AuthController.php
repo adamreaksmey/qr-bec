@@ -47,9 +47,11 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         $password = Hash::make($request->phone_number);
-        $user = User::create(array_merge($request->except('password'), [
+        $user = User::create([
+            "name" => $request->name,
+            "phone_number" => $request->phone_number,
             "password" => $password
-        ]));
+        ]);
 
         return response()->json([
             'status' => 'success',
