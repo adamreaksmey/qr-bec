@@ -27,7 +27,7 @@ class UserRegistrationRequest extends BaseRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => 'nullable|string|min:6',
             'phone_number' => 'required|string'
         ];
     }
