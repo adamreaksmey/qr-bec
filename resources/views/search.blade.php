@@ -22,6 +22,8 @@
     </div>
 </body>
 <script>
+    let userInfo;
+
     function getTypedInMembersInfo(value) {
         $.ajax({
             url: '/api/bec/all-members',
@@ -43,7 +45,9 @@
                 };
                 var suggestionsHTML = '';
                 response.data.forEach((element, index) => {
-                    suggestionsHTML += '<div class="hover:opacity-50 cursor-pointer">' + element.name + '</div>';
+                    suggestionsHTML +=
+                        `<div class="hover:opacity-50 cursor-pointer" onclick="assignUserState('${element.id}', '${element.name}')">` +
+                        element.name + `</div>`;
                 });
                 $('.parent-suggestion').html(suggestionsHTML);
                 $('.parent-suggestion').css({
@@ -56,6 +60,23 @@
                 console.log(xhr.responseText);
             }
         });
+    }
+
+    function assignUserState(value, name) {
+        // value is the user id
+        userInfo = value;
+        console.log(value, name)
+        $('.searchInput').val(name)
+        $('.parent-suggestion').css({
+            'height': '0',
+            'overflow': 'scroll',
+            'background-color': 'none'
+        })
+    }
+
+    function changeUserStatusInCamp() {
+        const localStatus = localStorage.getItem('client-status');
+        
     }
 </script>
 
