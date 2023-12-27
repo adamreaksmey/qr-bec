@@ -16,6 +16,7 @@
                 <input class="input w-full password" type="password" placeholder="and password..." />
             </div>
         </div>
+        <div class="alert-text text-danger"></div>
         <button id="loginButton" class="button is-primary">Login</button>
     </div>
 </body>
@@ -24,21 +25,22 @@
         $('#loginButton').click(function() {
             var email = $('.email').val();
             var password = $('.password').val();
-
-            // Send the data to the Auth controller
             $.ajax({
-                url: '/api/bec/login', // Replace with your actual route URL
-                method: 'POST',
+                url: '/api/bec/login',
+                type: 'POST',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
                 data: {
                     email: email,
                     password: password
                 },
                 success: function(response) {
-                    // Handle the success response from the server
-                    console.log(response);
+                    $('.alert-text').text(response.message)
+                    localStorage.setItem('token', response.token);
+                    window.location.href = '/dashboard';
                 },
                 error: function(xhr, status, error) {
-                    // Handle the error response from the server
                     console.log(xhr.responseText);
                 }
             });

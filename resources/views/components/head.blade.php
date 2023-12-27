@@ -7,4 +7,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxchimp/1.3.0/jquery.ajaxchimp.min.js"></script>
     <title>Hello!</title>
     @vite('resources/css/app.css')
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 </head>

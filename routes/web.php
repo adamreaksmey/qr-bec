@@ -33,8 +33,7 @@ Route::get("/login", function () {
     return view('admin.login');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get("/dashboard", function () {
-        return view('admin.dashboard');
-    });
+Route::get("/dashboard", function () {
+    return view('admin.dashboard');
 });
+

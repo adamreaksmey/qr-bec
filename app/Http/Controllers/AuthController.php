@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Http\Requests\UserLoginForm;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -23,10 +24,9 @@ class AuthController extends Controller
         }
         if (Hash::check($request->password, $user->password)) {
             $token = $user->createToken('authToken')->plainTextToken;
-            return redirect('/dashboard');
 
             return response([
-                'message' => 'Longin Success',
+                'message' => 'Login Success',
                 'success' => true,
                 'user' => $user,
                 'token' => $token,
@@ -61,5 +61,12 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out successfully'], 200);
+    }
+
+    public function getRegisteredUser(Request $request)
+    {
+        return $this->apiResponse([
+            "authUser" => auth()->user()
+        ]);
     }
 }
