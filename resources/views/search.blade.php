@@ -9,7 +9,11 @@
             Find your name or number
         </div>
         <div class="flex justify-center gap-3">
-            <div class="w-3/5"> <input class="input is-primary" type="text" placeholder="Search"></div>
+            <div class="w-3/5"> <input class="input is-primary searchInput" type="text" placeholder="Search"
+                    oninput="getTypedInMembersInfo()">
+                <div class="border border-none rounded pl-3 parent-suggestion">
+                </div>
+            </div>
             <button class="button is-success" onclick="window.location.href = '/checked-in'">Submit</button>
         </div>
         <div class="flex justify-center items-end">
@@ -17,5 +21,42 @@
         </div>
     </div>
 </body>
+<script>
+    function getTypedInMembersInfo(value) {
+        $.ajax({
+            url: '/api/bec/all-members',
+            type: 'GET',
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                keyword: $('.searchInput').val()
+            },
+            success: function(response) {
+                if (!$('.searchInput').val()) {
+                    $('.parent-suggestion').css({
+                        'height': '0',
+                        'overflow': 'scroll',
+                        'background-color': 'none'
+                    })
+                    return $('.parent-suggestion').empty()
+                };
+                var suggestionsHTML = '';
+                response.data.forEach((element, index) => {
+                    suggestionsHTML += '<div class="hover:opacity-50 cursor-pointer">' + element.name + '</div>';
+                });
+                $('.parent-suggestion').html(suggestionsHTML);
+                $('.parent-suggestion').css({
+                    'height': '100px',
+                    'overflow': 'scroll',
+                    'background-color': 'wheat'
+                })
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    }
+</script>
 
 </html>

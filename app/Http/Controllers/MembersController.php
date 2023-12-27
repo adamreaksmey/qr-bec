@@ -9,6 +9,9 @@ use App\Models\User;
 
 class MembersController extends Controller
 {
+    public function __construct(private User $user)
+    {
+    }
     public function registerRelatives(RelativeRegistrationForm $request)
     {
         $validated = $request->validated();
@@ -18,9 +21,16 @@ class MembersController extends Controller
         ]);
     }
 
-    public function getAllMembers()
+    public function getAllMembers(Request $request)
     {
-        $allMembers = User::with('relatives')->get();
-        return $this->apiResponse($allMembers);
+        $query = $this->user->with('relatives');
+        if ($request->keyword) {
+            $search = $request->keyword;
+            $query->where(function ($q) use ($search) {
+                $q->where('phone_number', 'LIKE', '%' . $search . '%')
+                    ->orWhere('name', 'LIKE', '%' . $search . '%');
+            });
+        }
+        return $this->apiResponse($query->get());
     }
 }
