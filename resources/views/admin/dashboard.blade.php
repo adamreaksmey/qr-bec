@@ -12,8 +12,8 @@
             </div>
             <nav class="mt-4">
                 <ul class="space-y-1">
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Users</a></li>
                     <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Dashboard</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Create users</a></li>
                     <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Settings</a></li>
                     <li><a href="#" class="block px-4 py-2 hover:bg-gray-700" onclick="handleLogOut()">Log out</a>
                     </li>
