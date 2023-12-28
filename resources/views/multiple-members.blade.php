@@ -98,7 +98,6 @@
 
                 if (allCheckboxes.length === checkedCheckboxes.length) {
                     window.location.href = `/checked-in?status=${localStatus}`
-                    return
                 } else {
                     console.log("Not all checkboxes are checked");
                 }
