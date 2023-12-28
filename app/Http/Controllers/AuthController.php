@@ -14,23 +14,30 @@ class AuthController extends Controller
 
     public function login(UserLoginForm $request)
     {
-        $request->validated();
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return response([
-                'message' => 'User Not Found!',
-                'success' => false
-            ]);
-        }
-        if (Hash::check($request->password, $user->password)) {
-            $token = $user->createToken('authToken')->plainTextToken;
+        // $request->validated();
+        // $user = User::where('email', $request->email)->first();
+        // if (!$user) {
+        //     return response([
+        //         'message' => 'User Not Found!',
+        //         'success' => false
+        //     ]);
+        // }
+        // if (Hash::check($request->password, $user->password)) {
+        //     $token = $user->createToken('authToken')->plainTextToken;
 
-            return response([
-                'message' => 'Login Success',
-                'success' => true,
-                'user' => $user,
-                'token' => $token,
-            ]);
+        //     return response([
+        //         'message' => 'Login Success',
+        //         'success' => true,
+        //         'user' => $user,
+        //         'token' => $token,
+        //     ]);
+        // }
+        $credentials = $request->validated();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('bec-project')->accessToken;
+            Auth::login($user, true);
+            return redirect()->intended('dashboard');
         }
         return response([
             'message' => 'Email and Password  not found!',
