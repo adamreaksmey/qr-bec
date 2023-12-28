@@ -23,6 +23,8 @@ Route::prefix('bec')->namespace('bec')->group(function () {
     Route::get('/all-members', [MembersController::class, 'getAllMembers']);
     Route::patch('/update-user-status', [MembersController::class, 'updateUserStatus']);
     Route::patch('/update-relative-status', [MembersController::class, 'updateRelativeStatus']);
+    Route::get("/check-user-relationship", [MembersController::class, 'checkUserRelationship']);
+    Route::get("/get-user-relatives", [MembersController::class, "getUsersRelatives"]);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-registered-user', [AuthController::class, 'getRegisteredUser']);

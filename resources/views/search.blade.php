@@ -87,7 +87,13 @@
                 status: localStatus
             },
             success: function(response) {
+
+                if (response.data.hasRelatives) {
+                    window.location.href = `/multiple-members?userId=${userInfo}`
+                    return
+                }
                 window.location.href = `/checked-in?status=${localStatus}`
+                return
             },
             error: function(xhr, status, error) {
                 console.log(xhr.responseText);
