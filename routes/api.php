@@ -21,8 +21,10 @@ Route::prefix('bec')->namespace('bec')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/create-relative', [MembersController::class, 'registerRelatives']);
     Route::get('/all-members', [MembersController::class, 'getAllMembers']);
+    Route::patch('/update-user-status', [MembersController::class, 'updateUserStatus']);
+    Route::patch('/update-relative-status', [MembersController::class, 'updateRelativeStatus']);
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/get-registered-user', [AuthController::class, 'getRegisteredUser']);
     });
 });

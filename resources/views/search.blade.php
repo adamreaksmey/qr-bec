@@ -14,7 +14,7 @@
                 <div class="border border-none rounded pl-3 parent-suggestion">
                 </div>
             </div>
-            <button class="button is-success" onclick="window.location.href = '/checked-in'">Submit</button>
+            <button class="button is-success" onclick="changeUserStatusInCamp()">Submit</button>
         </div>
         <div class="flex justify-center items-end">
             <button class="button is-warning">ខ្មែរ | English</button>
@@ -76,7 +76,23 @@
 
     function changeUserStatusInCamp() {
         const localStatus = localStorage.getItem('client-status');
-        
+        $.ajax({
+            url: '/api/bec/update-user-status',
+            type: 'PATCH',
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                userId: userInfo,
+                status: localStatus
+            },
+            success: function(response) {
+                window.location.href = `/checked-in?status=${localStatus}`
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
     }
 </script>
 

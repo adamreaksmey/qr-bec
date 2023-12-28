@@ -33,4 +33,34 @@ class MembersController extends Controller
         }
         return $this->apiResponse($query->get());
     }
+
+    public function updateUserStatus(Request $request)
+    {
+        $status = $request->status;
+        $userId = $request->userId;
+        $userExists = $this->user->where('id', $userId)->exists();
+        if ($userExists) {
+            return $this->user->where('id', $userId)->update([
+                "status" => $request->status
+            ]);
+        }
+        return response()->json([
+            "message" => "User with id of $userId does not exist!"
+        ]);
+    }
+
+    public function updateRelativeStatus(Request $request)
+    {
+        $relativeId = $request->relativeId;
+        $status = $request->status;
+        $relativeExists = $this->user->where('id', $relativeId)->exists();
+        if ($relativeExists) {
+            return $this->user->where('id', $relativeId)->update([
+                "status" => $status
+            ]);
+        }
+        return response()->json([
+            "message" => "Relative with id of $relativeId does not exist!"
+        ]);
+    }
 }
