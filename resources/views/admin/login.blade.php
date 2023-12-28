@@ -37,7 +37,7 @@
                 },
                 success: function(response) {
                     $('.alert-text').text(response.message)
-                    localStorage.setItem('token', response.token);
+                    // localStorage.setItem('token', response.token);
                     window.location.href = '/dashboard';
                 },
                 error: function(xhr, status, error) {

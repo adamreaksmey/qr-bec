@@ -27,11 +27,19 @@
                     </label>
                 </div>
             </div>
+            <div class="flex justify-center items-end">
+                <button class="button is-warning" onclick="redirectComplete()">All done!</button>
+            </div>
         </div>
     </div>
 </body>
 
 <script>
+    const localStatus = localStorage.getItem('client-status');
+
+    function redirectComplete() {
+        window.location.href = `/checked-in?status=${localStatus}`
+    }
     $(document).ready(function() {
         const url = new URL(window.location.href);
         const searchParams = new URLSearchParams(url.search);
@@ -40,8 +48,9 @@
         const localStatus = localStorage.getItem('client-status');
         if (localStatus == "arrived") {
             $(".title-desc").text("Who in your group is arriving?")
+        } else {
+            $(".title-desc").text("Who in your group is leaving?")
         }
-        $(".title-desc").text("Who in your group is leaving?")
 
         $.ajax({
             url: '/api/bec/get-user-relatives',
@@ -93,14 +102,14 @@
                 isNotParent: isNotParent
             },
             success: function(response) {
-                var allCheckboxes = $('.relatives-container input[type="checkbox"]');
-                var checkedCheckboxes = $('.relatives-container input[type="checkbox"]:checked');
+                // var allCheckboxes = $('.relatives-container input[type="checkbox"]');
+                // var checkedCheckboxes = $('.relatives-container input[type="checkbox"]:checked');
 
-                if (allCheckboxes.length === checkedCheckboxes.length) {
-                    window.location.href = `/checked-in?status=${localStatus}`
-                } else {
-                    console.log("Not all checkboxes are checked");
-                }
+                // if (allCheckboxes.length === checkedCheckboxes.length) {
+                //     window.location.href = `/checked-in?status=${localStatus}`
+                // } else {
+                //     console.log("Not all checkboxes are checked");
+                // }
             },
             error: function(xhr, status, error) {
                 console.log(xhr.responseText);
