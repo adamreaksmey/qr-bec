@@ -31,7 +31,7 @@ Route::get("/checked-in", function () {
 
 Route::get("/login", function () {
     return view('admin.login');
-});
+})->name('login');
 
 Route::middleware(['auth'])->group(function () {
     Route::get("/dashboard", function () {
