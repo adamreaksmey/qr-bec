@@ -51,7 +51,9 @@ class AuthController extends Controller
         $request->session()->invalidate(); // Invalidate the user's session
         $request->session()->regenerateToken(); // Regenerate the CSRF token
 
-        return redirect()->route('login')->with('success', 'You have been logged out.');
+        return response()->json([
+            "message" => "You are successfully logged out"
+        ], 200);
     }
 
 

@@ -15,7 +15,8 @@
                     <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Users</a></li>
                     <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Dashboard</a></li>
                     <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Settings</a></li>
-                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Log out</a></li>
+                    <li><a href="#" class="block px-4 py-2 hover:bg-gray-700" onclick="handleLogOut()">Log out</a>
+                    </li>
                 </ul>
             </nav>
         </aside>
@@ -55,9 +56,21 @@
     </div>
 </body>
 <script>
-    $(document).ready(function() {
-        
-    })
+    function handleLogOut() {
+        $.ajax({
+            url: '/api/bec/logout',
+            type: 'POST',
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function(response) {
+                window.location.href = '/login'
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    }
 </script>
 
 </html>
