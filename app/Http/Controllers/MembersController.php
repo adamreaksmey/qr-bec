@@ -31,6 +31,13 @@ class MembersController extends Controller
                     ->orWhere('name', 'LIKE', '%' . $search . '%');
             });
         }
+
+        if ($request->status) {
+            $search = $request->status;
+            $query->where(function ($q) use ($search) {
+                $q->where('status', $search);
+            });
+        }
         return $this->apiResponse($query->get());
     }
 
@@ -69,21 +76,25 @@ class MembersController extends Controller
 
     public function updateRelativeStatus(Request $request)
     {
-        $table = $this->relatives;
-        if (!$request->isNotParent) {
-            $table = $this->user;
-        }
         $userId = $request->id;
         $status = $request->status;
-        $relativeExists = $table->where('id', $userId)->exists();
-        if ($relativeExists) {
-            return $table->where('id', $userId)->update([
+
+        if ($request->isNotParent == 'false') {
+            $this->user->where('id', $userId)->update([
                 "status" => $status
             ]);
+            return response()->json([
+                "message" => "Parent has been updated"
+            ]);
+        } else {
+
+            $this->relatives->where('id', $userId)->update([
+                "status" => $status
+            ]);
+            return response()->json([
+                "message" => "Relative has been updated"
+            ]);
         }
-        return response()->json([
-            "message" => "User with id of $userId does not exist!"
-        ]);
     }
 
     public function getUsersRelatives(Request $request)
