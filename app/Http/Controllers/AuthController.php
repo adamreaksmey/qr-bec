@@ -14,24 +14,6 @@ class AuthController extends Controller
 
     public function login(UserLoginForm $request)
     {
-        // $request->validated();
-        // $user = User::where('email', $request->email)->first();
-        // if (!$user) {
-        //     return response([
-        //         'message' => 'User Not Found!',
-        //         'success' => false
-        //     ]);
-        // }
-        // if (Hash::check($request->password, $user->password)) {
-        //     $token = $user->createToken('authToken')->plainTextToken;
-
-        //     return response([
-        //         'message' => 'Login Success',
-        //         'success' => true,
-        //         'user' => $user,
-        //         'token' => $token,
-        //     ]);
-        // }
         $credentials = $request->validated();
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -64,11 +46,16 @@ class AuthController extends Controller
     }
 
 
+
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out successfully'], 200);
+        Auth::logout(); // Log out the authenticated user
+        $request->session()->invalidate(); // Invalidate the user's session
+        $request->session()->regenerateToken(); // Regenerate the CSRF token
+
+        return redirect()->route('login')->with('success', 'You have been logged out.');
     }
+
 
     public function getRegisteredUser(Request $request)
     {
