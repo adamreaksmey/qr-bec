@@ -4,7 +4,7 @@
 <x-head />
 
 <body>
-    <div class="flex flex-col justify-center items-center min-h-screen gap-10 w-full px-4 sm:px-6">
+    <div class="flex flex-col justify-center items-center min-h-screen gap-10 w-full px-4 sm:px-6" style="height: 100vh">
         <div class="text-2xl sm:text-3xl font-bold text-center">
             Are you arriving or leaving?
         </div>

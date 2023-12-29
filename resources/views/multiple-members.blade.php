@@ -4,7 +4,7 @@
 <x-head />
 
 <body>
-    <div class="min-h-screen flex justify-center items-center">
+    <div class="min-h-screen flex justify-center items-center" style="height: 100vh">
         <div class="flex flex-col">
             <div class="text-2xl sm:text-3xl pb-6 title-desc">Who in your group is leaving?</div>
             <div class="relatives-container">

@@ -4,7 +4,7 @@
 <x-head />
 
 <body>
-    <div class="flex flex-col justify-center h-screen items-center gap-10 w-full">
+    <div class="flex flex-col justify-center h-screen items-center gap-10 w-full" style="height: 100vh">
         <div class="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex justify-center text-center">
             Find your name or number
         </div>
