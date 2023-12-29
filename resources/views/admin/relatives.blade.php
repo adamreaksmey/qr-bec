@@ -46,6 +46,15 @@
     </div>
 
     <script>
+        const buttons = document.querySelectorAll('.button');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('bg-blue-500', 'bg-green-500'));
+                button.classList.add(button.id === 'arrivedButton' ? 'bg-blue-500' : 'bg-green-500');
+            });
+        });
+
         const fetchMembers = (status, keyword) => {
             $.ajax({
                 url: '/api/bec/all-relatives',

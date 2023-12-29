@@ -5,30 +5,16 @@
 
 <body>
     <div class="min-h-screen flex justify-center items-center" style="height: 100vh">
-        <div class="flex flex-col">
-            <div class="text-2xl sm:text-3xl pb-6 title-desc">Who in your group is leaving?</div>
-            <div class="relatives-container">
-                <div class="text-xl sm:text-2xl">
-                    <label class="checkbox flex items-center">
-                        <input type="checkbox" class="form-checkbox h-4 w-4">
-                        <span class="ml-2">Adam</span>
-                    </label>
-                </div>
-                <div class="text-xl sm:text-2xl">
-                    <label class="checkbox flex items-center">
-                        <input type="checkbox" class="form-checkbox h-4 w-4">
-                        <span class="ml-2">Zac</span>
-                    </label>
-                </div>
-                <div class="text-xl sm:text-2xl">
-                    <label class="checkbox flex items-center">
-                        <input type="checkbox" class="form-checkbox h-4 w-4">
-                        <span class="ml-2">Mey Mey</span>
-                    </label>
-                </div>
+        <div class="flex flex-col gap-2">
+            <div class="text-2xl sm:text-3xl pb-6 title-desc">
+                <span class="come"> {{ __('messages.group_come') }}</span>
+                <span class="go">{{ __('messages.group_leave') }}</span>
             </div>
-            <div class="flex justify-center items-end">
-                <button class="button is-warning" onclick="redirectComplete()">All done!</button>
+            <div class="relatives-container">
+            </div>
+            <div class="flex justify-center items-end gap-2">
+                <button class="button is-warning" onclick="redirectComplete()">{{ __('messages.submit') }}</button>
+                <x-refresh-button />
             </div>
         </div>
     </div>
@@ -47,9 +33,11 @@
 
         const localStatus = localStorage.getItem('client-status');
         if (localStatus == "arrived") {
-            $(".title-desc").text("Who in your group is arriving?")
+            $(".come").show();
+            $('.go').hide();
         } else {
-            $(".title-desc").text("Who in your group is leaving?")
+            $(".go").show();
+            $('.come').hide();
         }
 
         $.ajax({
@@ -68,7 +56,7 @@
                         `               
                             <div class="text-xl sm:text-2xl">
                                 <label class="checkbox flex items-center">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4" onclick="handleUpdateUserStatus('${element.id}', true)">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4" onclick="handleUpdateUserStatus('${element.id}', true, this.checked)">
                                     <span class="ml-2">${element.name}</span>
                                 </label>
                             </div>
@@ -76,8 +64,8 @@
                 });
                 suggestionsHTML += `
                         <div class="text-xl sm:text-2xl">
-                            <input type="checkbox" class="form-checkbox h-4 w-4" onclick="handleUpdateUserStatus('${paramValue}', false)">
-                                    <span class="ml-2">You</span>
+                            <input type="checkbox" class="form-checkbox h-4 w-4" onclick="handleUpdateUserStatus('${paramValue}', false, this.checked)">
+                                    <span class="ml-2 parent-member">You</span>
                         </div>
                     `;
                 $('.relatives-container').html(suggestionsHTML);
@@ -88,7 +76,7 @@
         });
     })
 
-    function handleUpdateUserStatus(event, isNotParent) {
+    function handleUpdateUserStatus(event, isNotParent, condition) {
         const localStatus = localStorage.getItem('client-status');
         $.ajax({
             url: '/api/bec/update-relative-status',
@@ -98,18 +86,11 @@
             },
             data: {
                 id: event,
-                status: localStatus,
+                status: condition ? localStatus : localStatus == 'arrived' ? 'left' : 'arrived',
                 isNotParent: isNotParent
             },
             success: function(response) {
-                // var allCheckboxes = $('.relatives-container input[type="checkbox"]');
-                // var checkedCheckboxes = $('.relatives-container input[type="checkbox"]:checked');
-
-                // if (allCheckboxes.length === checkedCheckboxes.length) {
-                //     window.location.href = `/checked-in?status=${localStatus}`
-                // } else {
-                //     console.log("Not all checkboxes are checked");
-                // }
+                console.log(response)
             },
             error: function(xhr, status, error) {
                 console.log(xhr.responseText);

@@ -40,6 +40,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\LanguageMiddleware::class,
         ],
 
         'api' => [

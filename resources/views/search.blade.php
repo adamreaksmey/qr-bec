@@ -6,18 +6,19 @@
 <body>
     <div class="flex flex-col justify-center h-screen items-center gap-10 w-full" style="height: 100vh">
         <div class="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex justify-center text-center">
-            Find your name or number
+            {{ __('messages.search_phone') }}
         </div>
         <div class="flex justify-center gap-3">
-            <div class="w-3/5"> <input class="input is-primary searchInput" type="text" placeholder="Search"
+            <div class="w-3/5"> <input class="input is-primary searchInput" type="text" placeholder="{{ __('messages.search') }}"
                     oninput="getTypedInMembersInfo()">
                 <div class="border border-none rounded pl-3 parent-suggestion">
                 </div>
             </div>
-            <button class="button is-success" onclick="changeUserStatusInCamp()">Submit</button>
+            <button class="button is-success" onclick="changeUserStatusInCamp()"> {{ __('messages.submit') }}</button>
         </div>
-        <div class="flex justify-center items-end">
-            <button class="button is-warning">ខ្មែរ | English</button>
+        <div class="flex justify-center items-end gap-3">
+            <x-lang-button />
+            <x-refresh-button />
         </div>
     </div>
 </body>

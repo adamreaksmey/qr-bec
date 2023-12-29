@@ -5,12 +5,16 @@
 
 <body>
     <div class="flex flex-col justify-center h-screen items-center gap-10 w-full" style="height: 100vh">
-        <div class="text-3xl font-bold lead-title"> You have arrived.</div>
-        <div class="flex justify-center text-center description">Finished, please remember to scan back in
-            when you arrive again!
+        <div class="text-3xl font-bold lead-title">
+            <span class="come">{{ __('messages.arrived_message') }}</span>
+            <span class="go">{{ __('messages.left_message') }}</span>
+        </div>
+        <div class="flex justify-center text-center description">
+            <span class="come">{{ __('messages.final_notice_arrived') }}</span>
+            <span class="go">{{ __('messages.final_notice_left') }}</span>
         </div>
         <div class="flex justify-center items-end">
-            <button class="button is-warning" onclick="window.location.href = '/'">Restart Session</button>
+            <x-refresh-button />
         </div>
     </div>
 </body>
@@ -21,12 +25,12 @@
         const paramValue = searchParams.get('status');
 
         if (paramValue == "arrived") {
-            $(".lead-title").text("You have arrived!")
-            $(".description").text("Finished, please remember to scan back in when you arrive again!")
-            return
+            $(".come").show();
+            $('.go').hide();
+        } else {
+            $(".go").show();
+            $('.come').hide();
         }
-        $(".lead-title").text("You have left!")
-        $(".description").text("Thank you for coming!")
     })
 </script>
 
