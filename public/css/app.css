@@ -1,5 +1,9 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@200&family=Open+Sans:wght@300&family=Tilt+Neon&display=swap"); */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* latin-ext */
 @font-face {
     font-family: "Bebas Neue";
@@ -11052,10 +11056,6 @@ a.has-text-danger-dark:hover {
     background-color: #fafafa;
     padding: 3rem 1.5rem 6rem;
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 body {
     font-family: "Bebas Neue", sans-serif;
