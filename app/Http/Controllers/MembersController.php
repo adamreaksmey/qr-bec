@@ -24,20 +24,29 @@ class MembersController extends Controller
     public function getAllMembers(Request $request)
     {
         $query = $this->user->with('relatives');
+
         if ($request->keyword) {
-            $search = $request->keyword;
-            $query->where(function ($q) use ($search) {
-                $q->where('phone_number', 'LIKE', '%' . $search . '%')
-                    ->orWhere('name', 'LIKE', '%' . $search . '%');
+            $query->when($request->keyword, function ($q) use ($request) {
+                $search = $request->keyword;
+                $q->where(function ($q) use ($search) {
+                    $q->where('phone_number', 'LIKE', '%' . $search . '%')
+                        ->orWhere('name', 'LIKE', '%' . $search . '%');
+                });
             });
         }
 
         if ($request->status) {
-            $search = $request->status;
-            $query->where(function ($q) use ($search) {
-                $q->where('status', $search);
+            $query->when($request->status, function ($q) use ($request) {
+                $search = $request->status;
+                $q->where(function ($q) use ($search) {
+                    $q->where('status', $search);
+                });
             });
         }
+
+
+        $query->orderByDesc('created_at');
+
         return $this->apiResponse($query->get());
     }
 
@@ -101,5 +110,31 @@ class MembersController extends Controller
     {
         $relatives = $this->user->where("id", $request->id)->with("relatives")->first();
         return $this->apiResponse($relatives);
+    }
+
+    public function getAllRelatives(Request $request)
+    {
+        $query = $this->relatives->with('users');
+
+        if ($request->keyword) {
+            $query->when($request->keyword, function ($q) use ($request) {
+                $search = $request->keyword;
+                $q->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', '%' . $search . '%');
+                });
+            });
+        }
+
+        if ($request->status) {
+            $query->when($request->status, function ($q) use ($request) {
+                $search = $request->status;
+                $q->where(function ($q) use ($search) {
+                    $q->where('status', $search);
+                });
+            });
+        }
+
+        $query->orderByDesc('created_at');
+        return $this->apiResponse($query->get());
     }
 }

@@ -6,16 +6,29 @@
         <div class="flex flex-col w-full justify-start">
             <div>Total campers: <span style="color: blue" class="total-all">100</span></div>
             <div>Total left: <span style="color: red" class="left">100</span></div>
-            <div>Total in: <span style="color: green" class="arrived">100</span></div>
+            <div>Total in camp: <span style="color: green" class="arrived">100</span></div>
         </div>
-        <div class="flex w-full justify-end gap-2">
-            <button class="button" onclick="fetchMembers('arrived')">In Camp</button>
-            <button class="button" onclick="fetchMembers('left')">Out Camp</button>
+        <div class="flex gap-2 pt-2">
+            <div class="field w-1/3">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Search" oninput="fetchMembers(null, this.value)">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="flex w-full justify-end gap-2">
+                <button id="arrivedButton" class="button" onclick="fetchMembers('arrived')">In Camp</button>
+                <button id="leftButton" class="button" onclick="fetchMembers('left')">Out Camp</button>
+                <button id="allButton" class="button" onclick="fetchMembers()">All</button>
+            </div>
         </div>
+
         <table class="min-w-full bg-white">
             <thead>
                 <tr>
                     <th class="py-2 px-4 border-b border-gray-200">#</th>
+                    <th class="py-2 px-4 border-b border-gray-200">User Id ( Parent Id )</th>
                     <th class="py-2 px-4 border-b border-gray-200">Name</th>
                     <th class="py-2 px-4 border-b border-gray-200">Email</th>
                     <th class="py-2 px-4 border-b border-gray-200">Phone</th>
@@ -28,6 +41,15 @@
     </div>
 </x-layout>
 <script>
+    const buttons = document.querySelectorAll('.button');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            buttons.forEach(btn => btn.classList.remove('bg-blue-500', 'bg-green-500'));
+            button.classList.add(button.id === 'arrivedButton' ? 'bg-blue-500' : 'bg-green-500');
+        });
+    });
+
     function handleLogOut() {
         $.ajax({
             url: '/api/bec/logout',
@@ -45,7 +67,7 @@
     }
 
 
-    const fetchMembers = (status) => {
+    const fetchMembers = (status, keyword) => {
         $.ajax({
             url: '/api/bec/all-members',
             type: 'GET',
@@ -53,7 +75,8 @@
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             data: {
-                status: status
+                status: status,
+                keyword: keyword
             },
             success: function(response) {
                 var suggestionsHTML = '';
@@ -61,8 +84,9 @@
                 response?.data?.forEach((element, index) => {
                     suggestionsHTML +=
                         `
-                        <tr>
+                        <tr class="hover:opacity-50 cursor-pointer">
                             <td class="py-2 px-4 border-b border-gray-200">${index + 1}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">${element?.id}</td>
                             <td class="py-2 px-4 border-b border-gray-200">${element.name}</td>
                             <td class="py-2 px-4 border-b border-gray-200">${element.email ?? ''}</td>
                             <td class="py-2 px-4 border-b border-gray-200">${element.phone_number}</td>
