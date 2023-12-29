@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<x-head />
-
-<body class="h-screen p-5">
+<x-layout>
     <div>Hello from register!</div>
     <div>Register user here:</div>
     <div>
@@ -44,7 +39,7 @@
     <div class="alert-text-relative"></div>
     <button type="button" class="button is-primary mt-10" id="registerRelative">Register relative</button>
 
-</body>
+</x-layout>
 <script>
     $(document).ready(function() {
         $('#registerButton').click(function() {
